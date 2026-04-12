@@ -69,3 +69,7 @@ npm run build
 - **Manifest V3:** Built using the modern Chrome extension standard.
 - **No Background Worker:** The extension state is updated only when the popup is open, pulling data directly via HTTP JSON-RPC to conserve resources.
 - **Communication:** Uses the LMS JSON-RPC API (`/jsonrpc.js`) via standard `fetch` calls.
+
+## Acknowledgments
+
+- Icons are provided by **[Phosphor Icons](https://phosphoricons.com/)**, which is licensed under the MIT License.
