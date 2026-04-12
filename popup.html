@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMS Controller</title>
+  <link rel="stylesheet" href="assets/phosphor-icons/regular/style.css">
+  <link rel="stylesheet" href="assets/phosphor-icons/fill/style.css">
+  <link rel="stylesheet" href="assets/phosphor-icons/bold/style.css">
+  <style>
+    body { font-family: sans-serif; width: 320px; padding: 10px; margin: 0; background-color: #f8f9fa; color: #333; }
+    
+    .header-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 10px; }
+    h3 { margin: 0; font-size: 16px; }
+    #btn-open-lms { background: none; border: none; cursor: pointer; color: #007bff; font-size: 14px; padding: 0; }
+    #btn-open-lms:hover { text-decoration: underline; }
+
+    #setup-msg { margin-bottom: 10px; }
+    #app-container { display: none; }
+    
+    .player-select-container { margin-bottom: 15px; }
+    select#player-select { width: 100%; padding: 6px; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc; }
+    
+    .now-playing-container { text-align: center; margin-bottom: 15px; background: white; padding: 10px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 50px; display: flex; flex-direction: column; justify-content: center; }
+    #track-title { font-weight: bold; margin-bottom: 4px; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #track-artist { font-size: 12px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .transport-controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
+    .btn-transport { background: #e0e0e0; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 16px; transition: background 0.2s; }
+    .btn-transport:hover { background: #d0d0d0; }
+    .btn-transport:active { background: #c0c0c0; }
+    .btn-transport:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .btn-primary { background: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+    .btn-primary:hover { background: #0056b3; }
+    
+    /* Browser Styles */
+    .browser-tabs { display: flex; margin-bottom: 10px; border-bottom: 1px solid #ddd; }
+    .browser-tab { flex: 1; text-align: center; padding: 8px; cursor: pointer; background: #eee; border: 1px solid #ddd; border-bottom: none; }
+    .browser-tab.active { background: #fff; font-weight: bold; border-bottom: 1px solid #fff; margin-bottom: -1px; }
+    .browser-tab:first-child { border-radius: 4px 0 0 0; }
+    .browser-tab:last-child { border-radius: 0 4px 0 0; }
+    
+    .browser-header { display: flex; align-items: center; margin-bottom: 10px; height: 24px; }
+    #btn-browser-back { background: none; border: none; color: #007bff; cursor: pointer; padding: 0 10px 0 0; font-size: 14px; display: none; }
+    #btn-browser-back:hover { text-decoration: underline; }
+    #browser-title { font-size: 14px; font-weight: bold; flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    #browser-list { list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; background: white; border: 1px solid #ccc; border-radius: 4px; }
+    .browser-item { padding: 8px 10px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+    .browser-item:last-child { border-bottom: none; }
+    .browser-item:hover { background-color: #f0f8ff; }
+    .browser-item-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; margin-right: 5px; }
+    .browser-item-icon { color: #888; font-size: 14px; display: flex; align-items: center; }
+    .action-btn { cursor: pointer; padding: 4px 6px; border-radius: 4px; border: 1px solid #ddd; background-color: #f8f9fa; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+    .action-btn:hover { background-color: #e9ecef; color: #333; border-color: #ccc; }
+
+    #status-msg { font-size: 12px; color: #888; text-align: center; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="header-container">
+    <h3>LMS Controller</h3>
+    <button id="btn-open-lms" title="Open LMS in new tab" style="display: none;">Open Web UI <i class="ph ph-arrow-square-out"></i></button>
+  </div>
+  
+  <div id="setup-container">
+    <div id="setup-msg">Loading...</div>
+    <button id="openOptions" class="btn-primary" style="display: none;">Configure LMS Server</button>
+  </div>
+
+  <div id="app-container">
+    <div class="player-select-container">
+      <select id="player-select">
+        <option value="">Loading players...</option>
+      </select>
+    </div>
+
+    <div class="now-playing-container">
+      <img id="album-art" src="" alt="" style="display: none; width: 48px; height: 48px; border-radius: 4px; margin-right: 10px; object-fit: cover; background: #eee;">
+      <div class="now-playing-info">
+        <div id="track-title">Not Playing</div>
+        <div id="track-artist">Select a player or start music</div>
+      </div>
+    </div>
+
+    <div class="transport-controls">
+      <button id="btn-prev" class="btn-transport" title="Previous"><i class="ph-fill ph-skip-back"></i></button>
+      <button id="btn-playpause" class="btn-transport" title="Play/Pause"><i class="ph-fill ph-play"></i></button>
+      <button id="btn-next" class="btn-transport" title="Next"><i class="ph-fill ph-skip-forward"></i></button>
+      <button id="btn-favorite" class="btn-transport" title="Toggle Favorite"><i class="ph ph-heart"></i></button>
+    </div>
+
+    <div class="browser-container">
+      <div class="browser-tabs">
+        <div id="tab-queue" class="browser-tab active" title="Current Queue">Queue</div>
+        <div id="tab-apps" class="browser-tab" style="display: none;">App</div>
+        <div id="tab-library" class="browser-tab" title="Browse Local Library">Library</div>
+        <div id="tab-favorites" class="browser-tab" title="Browse Favorites">Favorites</div>
+      </div>
+      <div class="browser-header">
+        <button id="btn-browser-back" title="Go back one level"><i class="ph ph-arrow-left"></i> Back</button>
+        <div id="browser-title">Current Queue</div>
+        <button id="btn-browser-refresh" title="Refresh" style="background: none; border: none; color: #007bff; cursor: pointer; padding: 0 0 0 10px; font-size: 14px; display: none;"><i class="ph ph-arrows-clockwise"></i></button>
+      </div>
+      <ul id="browser-list">
+        <!-- Items will be injected here -->
+      </ul>
+    </div>
+  </div>
+
+  <div id="status-msg"></div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

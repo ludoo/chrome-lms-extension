@@ -1,0 +1,19 @@
+{
+  "name": "lms-extension",
+  "version": "1.0.0",
+  "description": "A Chrome extension to interface with Lyrion Media Server (LMS) for media controls, player selection, and basic library navigation.",
+  "main": "lms-api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "bash scripts/build.sh"
+  },
+  "keywords": [
+    "chrome-extension",
+    "lms",
+    "lyrion",
+    "squeezebox"
+  ],
+  "author": "Ludovico Magnocavallo",
+  "license": "Apache-2.0",
+  "type": "commonjs"
+}

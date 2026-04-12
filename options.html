@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMS Controller Options</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 400px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; }
+    input[type="url"] { width: 100%; padding: 8px; box-sizing: border-box; }
+    button { padding: 8px 12px; }
+    #status { margin-top: 10px; color: green; }
+  </style>
+</head>
+<body>
+  <h2>LMS Configuration</h2>
+  <div class="form-group">
+    <label for="serverUrl">LMS Server URL (e.g., http://192.168.1.100:9000):</label>
+    <input type="url" id="serverUrl" placeholder="http://ip:port">
+  </div>
+  <button id="saveBtn">Save & Test Connection</button>
+  <div id="status"></div>
+
+  <div class="form-group" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+    <label for="appSelect"><strong>Custom App Tab (Optional)</strong><br><small style="color: #666; font-weight: normal;">Select a connected LMS app (like Spotty, TuneIn, etc.) to show as a tab in the extension. Save your server URL above first to fetch available apps.</small></label>
+    <select id="appSelect" style="width: 100%; padding: 8px; margin-bottom: 10px;" disabled>
+      <option value="">-- None (Hide App Tab) --</option>
+    </select>
+    <button id="fetchAppsBtn" disabled>Fetch Apps</button>
+    <div id="appStatus" style="margin-top: 5px; font-size: 13px; color: #666;"></div>
+  </div>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>
