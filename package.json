@@ -1,6 +1,6 @@
 {
   "name": "lms-extension",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Chrome extension to interface with Lyrion Media Server (LMS) for media controls, player selection, and basic library navigation.",
   "main": "lms-api.js",
   "scripts": {

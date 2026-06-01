@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "LMS Controller",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Ludovico Magnocavallo",
   "description": "Control your Lyrion Media Server from Chrome.",
   "icons": {
