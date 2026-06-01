@@ -67,6 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (result.lmsServerUrl) {
       api = new LMSApi(result.lmsServerUrl);
       
+      if (result.lmsLastPlayerId) {
+        activePlayerId = result.lmsLastPlayerId;
+      }
+      
       const success = await fetchPlayers();
       
       if (success) {
@@ -78,10 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
           let url = result.lmsServerUrl.replace(/\/$/, '');
           chrome.tabs.create({ url: url });
         });
-
-        if (result.lmsLastPlayerId) {
-          activePlayerId = result.lmsLastPlayerId;
-        }
         
         startPolling();
         if(activePlayerId) loadBrowserRoot();
@@ -539,6 +539,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (items.length === 0 && result.item_id && result.name) {
         items = [result];
+    }
+
+    if (currentTab === 'favorites' && Array.isArray(items)) {
+      items = [...items].reverse();
     }
 
     if (!items || items.length === 0) {

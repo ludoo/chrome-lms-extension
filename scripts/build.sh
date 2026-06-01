@@ -25,15 +25,26 @@ rsync -a --exclude="node_modules" --exclude="test-results" --exclude="playwright
 # Remove old zips if they exist
 rm -f "$TEST_ZIP" "$PUBLISH_ZIP"
 
+# Helper function to create zip archive
+create_zip() {
+  local target_zip="$1"
+  local base_dir="$2"
+  if command -v zip >/dev/null 2>&1; then
+    zip -qr "$target_zip" "$base_dir"
+  else
+    python3 -c "import shutil; shutil.make_archive('${target_zip%.*}', 'zip', '.', '$base_dir')"
+  fi
+}
+
 # Create zips
 echo "Creating test zip ($TEST_ZIP)..."
 cd "$TMP_DIR/test"
-zip -qr "$PROJECT_ROOT/$TEST_ZIP" "lms-extension"
+create_zip "$PROJECT_ROOT/$TEST_ZIP" "lms-extension"
 cd "$PROJECT_ROOT"
 
 echo "Creating publish zip ($PUBLISH_ZIP)..."
 cd "$TMP_DIR/publish"
-zip -qr "$PROJECT_ROOT/$PUBLISH_ZIP" "lms-extension"
+create_zip "$PROJECT_ROOT/$PUBLISH_ZIP" "lms-extension"
 cd "$PROJECT_ROOT"
 
 # Cleanup
